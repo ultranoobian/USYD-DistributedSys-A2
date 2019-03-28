@@ -22,18 +22,22 @@ public class ServerInfoList {
 
     public boolean addServerInfo(ServerInfo newServerInfo) { 
         // implement your code here
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public boolean updateServerInfo(int index, ServerInfo newServerInfo) { 
         // implement your code here
+        throw new UnsupportedOperationException("Not yet implemented");
     }
     
     public boolean removeServerInfo(int index) { 
         // implement your code here
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public boolean clearServerInfo() { 
         // implement your code here
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public String toString() {

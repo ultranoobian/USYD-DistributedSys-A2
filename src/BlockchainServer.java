@@ -16,7 +16,11 @@ public class BlockchainServer {
 
         // implement your code here
         pcr.setRunning(false);
-        pct.join();
+        try {
+            pct.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // implement any helper method here if you need any
