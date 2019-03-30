@@ -1,6 +1,6 @@
 import java.net.Socket;
 
-public class BlockchainServerRunnable implements Runnable{
+public class BlockchainServerRunnable implements Runnable {
 
     private Socket clientSocket;
     private Blockchain blockchain;
@@ -12,6 +12,6 @@ public class BlockchainServerRunnable implements Runnable{
     public void run() {
         // implement your code here
     }
-    
+
     // implement any helper method here if you need any
 }

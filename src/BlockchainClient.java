@@ -21,15 +21,15 @@ public class BlockchainClient {
         }
     }
 
-    public void unicast (int serverNumber, ServerInfo p, String message) {
+    public void unicast(int serverNumber, ServerInfo p, String message) {
         // implement your code here
     }
 
-    public void broadcast (ServerInfoList pl, String message) {
+    public void broadcast(ServerInfoList pl, String message) {
         // implement your code here
     }
 
-    public void multicast (ServerInfoList serverInfoList, ArrayList<Integer> serverIndices, String message) {
+    public void multicast(ServerInfoList serverInfoList, ArrayList<Integer> serverIndices, String message) {
         // implement your code here
     }
 

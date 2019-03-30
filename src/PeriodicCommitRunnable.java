@@ -1,6 +1,6 @@
 import java.security.SecureRandom;
 
-public class PeriodicCommitRunnable implements Runnable{
+public class PeriodicCommitRunnable implements Runnable {
 
     private volatile boolean isRunning;
     private int nonce;
@@ -14,12 +14,12 @@ public class PeriodicCommitRunnable implements Runnable{
         nonce = randomGenerator.nextInt();
     }
 
-    public void setRunning(boolean isRunning) {
-        this.isRunning = isRunning;
-    }
-
     public boolean getRunning() {
         return isRunning;
+    }
+
+    public void setRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 
     @Override

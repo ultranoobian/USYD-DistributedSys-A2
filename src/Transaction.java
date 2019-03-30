@@ -44,10 +44,7 @@ public class Transaction {
             return false;
         }
         Transaction tx = (Transaction) other;
-        if (content.equals(tx.getContent()) && sender.equals(tx.getSender())) {
-            return true;
-        }
-        return false;
+        return content.equals(tx.getContent()) && sender.equals(tx.getSender());
     }
 
     private boolean validate() {
@@ -57,10 +54,7 @@ public class Transaction {
         if (!sender.matches("^[a-z]{4}[0-9]{4}$")) {
             return false;
         }
-        if (content.contains("\\|") || content.length() > 70) {
-            return false;
-        }
-        return true;
+        return !content.contains("\\|") && content.length() <= 70;
     }
 
     public boolean isValid() {
