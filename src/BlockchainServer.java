@@ -27,6 +27,19 @@ public class BlockchainServer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        Executor executor = Executors.newFixedThreadPool(32);
+        Socket clientSocket;
+        try (ServerSocket serverSocket = new ServerSocket(13333)) {
+            while ((clientSocket = serverSocket.accept()).isBound()) {
+                Runnable ncs = new BlockchainServerRunnable(clientSocket, blockchain);
+                executor.execute(ncs);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // implement any helper method here if you need any
