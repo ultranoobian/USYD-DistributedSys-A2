@@ -21,13 +21,6 @@ public class BlockchainServer {
         pct.start();
 
         // implement your code here
-        pcr.setRunning(false);
-        try {
-            pct.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         Executor executor = Executors.newFixedThreadPool(32);
         Socket clientSocket;
         try (ServerSocket serverSocket = new ServerSocket(13333)) {
@@ -39,6 +32,16 @@ public class BlockchainServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        // Do not modify below this line
+        pcr.setRunning(false);
+        try {
+            pct.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
