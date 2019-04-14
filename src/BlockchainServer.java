@@ -7,13 +7,32 @@ import java.util.concurrent.Executors;
 public class BlockchainServer {
 
     public static void main(String[] args) {
-
-        if (args.length != 1) {
-            return;
-        }
-
-        int portNumber = Integer.parseInt(args[0]);
+        final boolean FLAG_DEBUG;
+        int portNumber;
         Blockchain blockchain = new Blockchain();
+
+        // Check number of arguments, exits if too few
+        if (args.length < 1) {
+            System.out.print("Usage: BlockchainServer <port> [debug:true|false}");
+            return;
+        } else {
+            // Try to parse port number
+            try {
+                portNumber = Integer.parseInt(args[0]);
+
+            } catch (NumberFormatException nfe) {
+                System.out.print("Error: Invalid port number!");
+                return;
+            }
+
+            if (args.length == 2) {
+                try {
+                    FLAG_DEBUG = Boolean.parseBoolean(args[1]);
+                } catch (ArrayIndexOutOfBoundsException outOfBounds) {
+                    System.err.println(outOfBounds);
+                }
+            }
+        }
 
 
         PeriodicCommitRunnable pcr = new PeriodicCommitRunnable(blockchain);
@@ -23,7 +42,7 @@ public class BlockchainServer {
         // implement your code here
         Executor executor = Executors.newFixedThreadPool(32);
         Socket clientSocket;
-        try (ServerSocket serverSocket = new ServerSocket(13333)) {
+        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             while ((clientSocket = serverSocket.accept()).isBound()) {
                 Runnable ncs = new BlockchainServerRunnable(clientSocket, blockchain);
                 executor.execute(ncs);
