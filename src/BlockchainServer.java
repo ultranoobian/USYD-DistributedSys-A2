@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 public class BlockchainServer {
 
     public static void main(String[] args) {
-        final boolean FLAG_DEBUG;
+        boolean FLAG_DEBUG = false;
         int portNumber;
         Blockchain blockchain = new Blockchain();
 
@@ -28,6 +28,7 @@ public class BlockchainServer {
             if (args.length == 2) {
                 try {
                     FLAG_DEBUG = Boolean.parseBoolean(args[1]);
+                    if (FLAG_DEBUG) System.out.println("Logging is enabled");
                 } catch (ArrayIndexOutOfBoundsException outOfBounds) {
                     System.err.println(outOfBounds);
                 }
@@ -43,6 +44,7 @@ public class BlockchainServer {
         Executor executor = Executors.newFixedThreadPool(32);
         Socket clientSocket;
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+            if (FLAG_DEBUG) System.out.println(String.format("Attempting to start listening on port %s", portNumber));
             while ((clientSocket = serverSocket.accept()).isBound()) {
                 Runnable ncs = new BlockchainServerRunnable(clientSocket, blockchain);
                 executor.execute(ncs);
