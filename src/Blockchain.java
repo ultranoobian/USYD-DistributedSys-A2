@@ -39,45 +39,56 @@ public class Blockchain {
     }
 
     public boolean addTransaction(String txString) {
-        String[] tokens = txString.split("\\|");
-        if (tokens.length != 3) {
-            return false;
+        lock.writeLock().lock();
+        try {
+            String[] tokens = txString.split("\\|");
+            if (tokens.length != 3) {
+                return false;
+            }
+            if (!tokens[0].equals("tx")) {
+                return false;
+            }
+            Transaction transaction = new Transaction();
+            transaction.setSender(tokens[1]);
+            transaction.setContent(tokens[2]);
+            if (!transaction.isValid()) {
+                return false;
+            }
+            pool.add(transaction);
+            return true;
+        } finally {
+            lock.writeLock().unlock();
         }
-        if (!tokens[0].equals("tx")) {
-            return false;
-        }
-        Transaction transaction = new Transaction();
-        transaction.setSender(tokens[1]);
-        transaction.setContent(tokens[2]);
-        if (!transaction.isValid()) {
-            return false;
-        }
-        pool.add(transaction);
-        return true;
     }
 
     public boolean commit(int nonce) {
-        if (pool.size() == 0) {
+        lock.writeLock().lock();
+        try {
+            if (pool.size() == 0) {
+                return false;
+            }
+
+            Block newBlock = new Block();
+            if (head == null) {
+                newBlock.setPreviousHash(new byte[32]);
+            } else {
+                newBlock.setPreviousHash(head.calculateHash());
+            }
+            newBlock.setTransactions(pool);
+            byte[] hash = newBlock.calculateHashWithNonce(nonce);
+            String hashString = Base64.getEncoder().encodeToString(hash);
+            if (hashString.startsWith("A")) {
+                newBlock.setPreviousBlock(head);
+                head = newBlock;
+                pool = new ArrayList<>();
+                length += 1;
+                return true;
+            }
             return false;
+        } finally {
+            lock.writeLock().unlock();
         }
 
-        Block newBlock = new Block();
-        if (head == null) {
-            newBlock.setPreviousHash(new byte[32]);
-        } else {
-            newBlock.setPreviousHash(head.calculateHash());
-        }
-        newBlock.setTransactions(pool);
-        byte[] hash = newBlock.calculateHashWithNonce(nonce);
-        String hashString = Base64.getEncoder().encodeToString(hash);
-        if (hashString.startsWith("A")) {
-            newBlock.setPreviousBlock(head);
-            head = newBlock;
-            pool = new ArrayList<>();
-            length += 1;
-            return true;
-        }
-        return false;
     }
 
     public String toString() {
