@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Blockchain {
 
     private Block head;
     private ArrayList<Transaction> pool;
     private int length;
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public Blockchain() {
         pool = new ArrayList<>();
@@ -79,17 +81,27 @@ public class Blockchain {
     }
 
     public String toString() {
-        String cutOffRule = new String(new char[81]).replace("\0", "-") + "\n";
-        String poolString = "";
-        for (Transaction tx : pool) {
-            poolString += tx.toString();
-        }
+        String cutOffRule;
+        String poolString;
+        String blockString;
 
-        String blockString = "";
-        Block bl = head;
-        while (bl != null) {
-            blockString += bl.toString();
-            bl = bl.getPreviousBlock();
+        // Use a read-lock to avoid blockchain being modified while generating string
+        lock.readLock().lock();
+        try {
+            cutOffRule = new String(new char[81]).replace("\0", "-") + "\n";
+            poolString = "";
+            for (Transaction tx : pool) {
+                poolString += tx.toString();
+            }
+
+            blockString = "";
+            Block bl = head;
+            while (bl != null) {
+                blockString += bl.toString();
+                bl = bl.getPreviousBlock();
+            }
+        } finally {
+            lock.readLock().unlock();
         }
 
         return "Pool:\n"
