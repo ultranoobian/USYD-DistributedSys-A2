@@ -5,9 +5,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class BlockchainServer {
+    public static boolean FLAG_DEBUG = false;
 
     public static void main(String[] args) {
-        boolean FLAG_DEBUG = false;
         int portNumber;
         Blockchain blockchain = new Blockchain();
 
