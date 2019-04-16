@@ -1,3 +1,5 @@
+import java.util.regex.Pattern;
+
 public class ServerInfo {
 
     private String host;
@@ -25,4 +27,27 @@ public class ServerInfo {
     }
 
     // implement any helper method here if you need any
+    public static boolean validateConfiguration(String hostname, int portnum) {
+//        Pattern hostnamePattern = Pattern.compile("((localhost)|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))");
+//        if (hostnamePattern.matcher(hostname).find() && portnum >= 1024 && portnum <= 65535) {
+//            return true;
+//        }
+//        return false;
+        return (validateHostname(hostname) && validatePortNum(portnum));
+    }
+
+    public static boolean validateHostname(String hostname) {
+        Pattern hostnamePattern = Pattern.compile("((localhost)|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))");
+        if (hostnamePattern.matcher(hostname).find()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean validatePortNum(int portnum) {
+        if (portnum >= 1024 && portnum <= 65535) {
+            return true;
+        }
+        return false;
+    }
 }
