@@ -19,6 +19,11 @@ public class BlockchainServer {
             // Try to parse port number
             try {
                 portNumber = Integer.parseInt(args[0]);
+                if (portNumber < 1024 || portNumber > 65535) {
+                    System.out.print("Usage: BlockchainServer <port> [debug:true|false}");
+                    return;
+                }
+
 
             } catch (NumberFormatException nfe) {
                 System.out.print("Error: Invalid port number!");
@@ -44,6 +49,7 @@ public class BlockchainServer {
         Executor executor = Executors.newFixedThreadPool(32);
         Socket clientSocket;
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+            serverSocket.setSoTimeout(2000);
             if (FLAG_DEBUG) System.out.println(String.format("Attempting to start listening on port %s", portNumber));
             while ((clientSocket = serverSocket.accept()).isBound()) {
                 Runnable ncs = new BlockchainServerRunnable(clientSocket, blockchain);

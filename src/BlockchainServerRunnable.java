@@ -20,12 +20,19 @@ public class BlockchainServerRunnable implements Runnable {
         }
 
         try {
+            clientSocket.setSoTimeout(2000);
             serverHandler(blockchain, clientSocket.getInputStream(), clientSocket.getOutputStream());
         } catch (IOException e) {
             if (BlockchainServer.FLAG_DEBUG) {
                 System.err.println(String.format("IO Exception occurred! Thread ID: %d.", Thread.currentThread().getId()));
             }
             e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -91,6 +98,7 @@ public class BlockchainServerRunnable implements Runnable {
                 }
             }
         } catch (SocketException se) {
+            System.err.print(se.toString());
             System.err.println("Socket Exception: Connection was reset.");
         } finally {
             inputReader.close();

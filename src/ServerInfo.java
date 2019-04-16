@@ -38,16 +38,10 @@ public class ServerInfo {
 
     public static boolean validateHostname(String hostname) {
         Pattern hostnamePattern = Pattern.compile("((localhost)|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))");
-        if (hostnamePattern.matcher(hostname).find()) {
-            return true;
-        }
-        return false;
+        return hostnamePattern.matcher(hostname).find();
     }
 
     public static boolean validatePortNum(int portnum) {
-        if (portnum >= 1024 && portnum <= 65535) {
-            return true;
-        }
-        return false;
+        return portnum >= 1024 && portnum <= 65535;
     }
 }

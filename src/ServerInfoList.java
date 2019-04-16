@@ -13,7 +13,7 @@ public class ServerInfoList {
 
     enum configLineType {NUM, HOST, PORT}
 
-    Dictionary<Pattern, configLineType> configMatchingLibrary = new Hashtable();
+    Hashtable<Pattern, configLineType> configMatchingLibrary = new Hashtable<>();
 
 
     public ServerInfoList() {
@@ -130,14 +130,19 @@ public class ServerInfoList {
                     mp.reset();
                     if (mp.find()) {
                         hostname = mp.group();
-                        if (processedList.containsKey(serverIndexNumber) && processedList.get(serverIndexNumber) != null) {
-                            processedList.get(serverIndexNumber).setHost(hostname);
+                        if (!hostname.isEmpty()) {
+                            if (processedList.containsKey(serverIndexNumber) && processedList.get(serverIndexNumber) != null) {
+                                processedList.get(serverIndexNumber).setHost(hostname);
+                                serverIndexNumber = -1;
+                                hostname = null;
+                            } else {
+
+                                // Setup to expect a PORT line.
+                                nextExpectedType = configLineType.PORT;
+                            }
+                        } else {
                             serverIndexNumber = -1;
                             hostname = null;
-                        } else {
-
-                            // Setup to expect a PORT line.
-                            nextExpectedType = configLineType.PORT;
                         }
                     }
 
@@ -215,10 +220,7 @@ public class ServerInfoList {
     }
 
     private boolean validatePortNumber(int portNumber) {
-        if (portNumber >= 1024 && portNumber <= 65535) {
-            return true;
-        }
-        return false;
+        return portNumber >= 1024 && portNumber <= 65535;
     }
 
     public ArrayList<ServerInfo> getServerInfos() {
